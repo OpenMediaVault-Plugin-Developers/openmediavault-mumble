@@ -52,13 +52,11 @@ class OMVModuleMumble extends OMVModuleServiceAbstract
             throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
                 $this->getXPath());
 
-        $initd = new OMVSysVInitScript("mumble-server");
-
         return array(
             "name"    => $this->getName(),
             "title"   => gettext("Mumble"),
             "enabled" => boolval($object["enable"]),
-            "running" => $initd->status() == 0
+            "running" => $this->exec("ps cax | grep murmurd > /dev/null") == 0
         );
     }
 
