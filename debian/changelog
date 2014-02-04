@@ -1,0 +1,5 @@
+openmediavault-mumble (0.5.33) stable; urgency=low
+
+  * Initial release
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Tue, 04 Feb 2014 21:39:26 +0100

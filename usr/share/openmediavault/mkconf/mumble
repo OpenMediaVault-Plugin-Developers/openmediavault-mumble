@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# Copyright (C) 2014 OpenMediaVault Plugin Developers
+#
+# This file is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This file is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this file. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /etc/default/openmediavault
+. /usr/share/openmediavault/scripts/helper-functions
+
+OMV_PLUGIN_XPATH=//services/mumble
+MUMBLE_SERVER_INI=/etc/mumble-server.ini
+
+serverpassword=$(omv_config_get "${OMV_PLUGIN_XPATH}/serverpassword")
+bandwidth=$(omv_config_get "${OMV_PLUGIN_XPATH}/bandwidth")
+users=$(omv_config_get "${OMV_PLUGIN_XPATH}/users")
+force_opus=$(omv_config_get "${OMV_PLUGIN_XPATH}/force_opus")
+opusthreshold=100
+welcometext=$(omv_config_get "${OMV_PLUGIN_XPATH}/welcometext")
+channelname=$(omv_config_get "${OMV_PLUGIN_XPATH}/channelname")
+username=$(omv_config_get "${OMV_PLUGIN_XPATH}/username")
+register_name=$(omv_config_get "${OMV_PLUGIN_XPATH}/register_name")
+
+if [ $force_opus -eq 1 ]; then
+    opusthreshold=0
+fi
+
+/bin/sed -i "s/^[#]\?serverpassword.*/serverpassword=${serverpassword}/" ${MUMBLE_SERVER_INI}
+/bin/sed -i "s/^[#]\?bandwidth.*/bandwidth=${bandwidth}/" ${MUMBLE_SERVER_INI}
+/bin/sed -i "s/^[#]\?users.*/users=${users}/" ${MUMBLE_SERVER_INI}
+/bin/sed -i "s/^[#]\?opusthreshold.*/opusthreshold=${opusthreshold}/" ${MUMBLE_SERVER_INI}
+/bin/sed -i "s/^[#]\?registerName.*/registerName=${register_name}/" ${MUMBLE_SERVER_INI}
+
+exit 0

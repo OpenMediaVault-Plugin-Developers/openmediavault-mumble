@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -e
+
+. /etc/default/openmediavault
+. /usr/share/openmediavault/scripts/helper-functions
+
+case "$1" in
+    configure)
+        if ! omv_config_exists "/config/services/mumble"; then
+            omv_config_add_element "/config/services" "mumble"
+            omv_config_add_element "/config/services/mumble" "enable" "0"
+            omv_config_add_element "/config/services/mumble" "serverpassword" ""
+            omv_config_add_element "/config/services/mumble" "bandwidth" "72000"
+            omv_config_add_element "/config/services/mumble" "users" "100"
+            omv_config_add_element "/config/services/mumble" "force_opus" "0"
+        fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument" >&2
+        exit 1
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0
