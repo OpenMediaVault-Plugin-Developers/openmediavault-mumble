@@ -15,6 +15,11 @@ case "$1" in
             omv_config_add_element "/config/services/mumble" "users" "100"
             omv_config_add_element "/config/services/mumble" "force_opus" "0"
         fi
+
+        # Activate package triggers. These triggers are only set during the
+        # package installation.
+        dpkg-trigger update-fixperms
+        dpkg-trigger update-locale
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

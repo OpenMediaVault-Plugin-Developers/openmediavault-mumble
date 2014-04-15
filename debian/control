@@ -7,5 +7,5 @@ Standards-Version: 3.9.3
 
 Package: openmediavault-mumble
 Architecture: all
-Depends: openmediavault (>= 0.6), mumble-server, ${misc:Depends}
+Depends: openmediavault (>= 0.6.0.6), mumble-server, ${misc:Depends}
 Description: Mumble server plugin for OpenMediaVault.
