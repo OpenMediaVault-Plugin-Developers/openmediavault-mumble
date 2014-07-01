@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once "openmediavault/object.inc";
 require_once "openmediavault/error.inc";
-require_once "openmediavault/util.inc";
-require_once "openmediavault/rpc.inc";
 require_once "openmediavault/notify.inc";
+require_once "openmediavault/object.inc";
+require_once "openmediavault/rpc.inc";
+require_once "openmediavault/util.inc";
 
 class OMVRpcServiceMumble extends OMVRpcServiceAbstract
 {
@@ -53,9 +53,12 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
 
         // Get configuration object
         $object = $xmlConfig->get($this->getXPath());
-        if (is_null($object))
-            throw new OMVException(OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath());
+        if (is_null($object)) {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
+                $this->getXPath()
+            );
+        }
 
         // Modify result data
         $settingsObject["enable"]         = boolval($object["enable"]);
@@ -77,17 +80,20 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         ));
 
         // Validate the parameters of the RPC service method.
-        $this->validateMethodParams($params, '{
-            "type"       : "object",
-            "properties" : {
-                "enable"         : { "type" : "boolean" },
-                "serverpassword" : { "type" : "string" },
-                "bandwidth"      : { "type" : "integer" },
-                "users"          : { "type" : "integer" },
-                "force_opus"     : { "type" : "boolean" },
-                "register_name"  : { "type" : "string" }
-            }
-        }');
+        $this->validateMethodParams(
+            $params,
+            '{
+                "type"       : "object",
+                "properties" : {
+                    "enable"         : { "type" : "boolean" },
+                    "serverpassword" : { "type" : "string" },
+                    "bandwidth"      : { "type" : "integer" },
+                    "users"          : { "type" : "integer" },
+                    "force_opus"     : { "type" : "boolean" },
+                    "register_name"  : { "type" : "string" }
+                }
+            }'
+        );
 
         // Prepare configuration data
         $object = array(
@@ -100,9 +106,12 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         );
 
         // Set configuration object
-        if (false === $xmlConfig->replace($this->getXPath(), $object))
-            throw new OMVException(OMVErrorMsg::E_CONFIG_SET_OBJECT_FAILED,
-                $this->$xPath);
+        if (false === $xmlConfig->replace($this->getXPath(), $object)) {
+            throw new OMVException(
+                OMVErrorMsg::E_CONFIG_SET_OBJECT_FAILED,
+                $this->$xPath
+            );
+        }
 
         // Notify configuration changes
         $dispatcher = &OMVNotifyDispatcher::getInstance();
@@ -119,23 +128,31 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         ));
 
         // Validate the parameters of the RPC service method.
-        $this->validateMethodParams($params, '{
-            "type"       : "object",
-            "properties" : {
-                "password" : { "type" : "string" }
-            }
-        }');
+        $this->validateMethodParams(
+            $params,
+            '{
+                "type"       : "object",
+                "properties" : {
+                    "password" : { "type" : "string" }
+                }
+            }'
+        );
 
         $password = trim($params["password"]);
 
-        if (strlen($password) < 8)
+        if (strlen($password) < 8) {
             throw new \Exception("The password length should be at least eight characters long.");
+        }
 
         $cmd = sprintf("sudo -i murmurd -ini /etc/mumble-server.ini -supw %s", $password);
 
-        if (0 !== $this->exec($cmd, $output))
-            throw new OMVException(OMVErrorMsg::E_EXEC_FAILED,
-                $cmd, implode("\n", $output));
+        if (0 !== $this->exec($cmd, $output)) {
+            throw new OMVException(
+                OMVErrorMsg::E_EXEC_FAILED,
+                $cmd,
+                implode("\n", $output)
+            );
+        }
     }
 }
 
