@@ -27,13 +27,32 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
     OMVINotifyListener,
     OMVIModuleServiceStatus
 {
-    private function getXPath()
+    private $initName = "mumble-server";
+
+    /**
+     * Get the main event message path.
+     *
+     * @return string
+     */
+    private function getEventMessagePath()
     {
-        return "//services/mumble";
+        return "org.openmediavault.services.mumble";
+    }
+
+    /**
+     * Get the service configuration XPath.
+     *
+     * @return string
+    */
+    private function getXpath()
+    {
+        return "/config/services/mumble";
     }
 
     /**
      * Get the module name.
+     *
+     * @return string
      */
     public function getName()
     {
@@ -41,35 +60,41 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
     }
 
     /**
-     * Get the status of the service
+     * Get the module status.
+     *
+     * @return array
      */
     public function getStatus()
     {
         global $xmlConfig;
 
-        $object = $xmlConfig->get($this->getXPath());
+        $object = $xmlConfig->get($this->getXpath());
 
         if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
+                $this->getXpath()
             );
         }
+
+        $initd = new OMVSysVInitScript($this->initName);
 
         return array(
             "name"    => $this->getName(),
             "title"   => gettext("Mumble"),
             "enabled" => boolval($object["enable"]),
-            "running" => $this->exec("ps cax | grep murmurd > /dev/null") == 0
+            "running" => $initd->status() == 0
         );
     }
 
     /**
-     * Create and update the configuration
+     * Generate the configuration.
+     *
+     * @return void
      */
     public function applyConfig()
     {
-        $cmd = sprintf("sudo omv-mkconf %s 2>&1", $this->getName());
+        $cmd = sprintf("omv-mkconf %s 2>&1", $this->getName());
 
         if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
@@ -81,18 +106,20 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
     }
 
     /**
-     * Start the service
+     * Start the managed service.
+     *
+     * @return void
      */
     public function startService()
     {
         global $xmlConfig;
 
-        $object = $xmlConfig->get($this->getXPath());
+        $object = $xmlConfig->get($this->getXpath());
 
         if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
+                $this->getXpath()
             );
         }
 
@@ -100,27 +127,31 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
             return;
         }
 
-        $initd = new OMVSysVInitScript("mumble-server", true);
+        $initd = new OMVSysVInitScript($this->initName, true);
         $initd->exec();
     }
 
     /**
-     * Stop the service
+     * Stop the managed service.
+     *
+     * @return void
      */
     public function stopService()
     {
-        $initd = new OMVSysVInitScript("mumble-server");
+        $initd = new OMVSysVInitScript($this->initName);
         $initd->exec();
     }
 
     /**
      * Bind listeners.
+     *
+     * @return void
      */
     public function bindListeners(OMVNotifyDispatcher $dispatcher)
     {
         $dispatcher->addListener(
             OMV_NOTIFY_CREATE | OMV_NOTIFY_MODIFY | OMV_NOTIFY_DELETE,
-            "org.openmediavault.services.mumble",
+            $this->getEventMessagePath(),
             array($this, "setDirty")
         );
     }

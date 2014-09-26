@@ -7,13 +7,17 @@ set -e
 
 case "$1" in
     configure)
-        if ! omv_config_exists "/config/services/mumble"; then
-            omv_config_add_element "/config/services" "mumble"
-            omv_config_add_element "/config/services/mumble" "enable" "0"
-            omv_config_add_element "/config/services/mumble" "serverpassword" ""
-            omv_config_add_element "/config/services/mumble" "bandwidth" "72000"
-            omv_config_add_element "/config/services/mumble" "users" "100"
-            omv_config_add_element "/config/services/mumble" "force_opus" "0"
+        SERVICE_XPATH_NAME="mumble"
+        SERVICE_XPATH="/config/services/${SERVICE_XPATH_NAME}"
+
+        if ! omv_config_exists "${SERVICE_XPATH}"; then
+            omv_config_add_element "/config/services" "${SERVICE_XPATH_NAME}"
+
+            omv_config_add_element "${SERVICE_XPATH}" "enable" "0"
+            omv_config_add_element "${SERVICE_XPATH}" "server_password" ""
+            omv_config_add_element "${SERVICE_XPATH}" "bandwidth" "72000"
+            omv_config_add_element "${SERVICE_XPATH}" "users" "100"
+            omv_config_add_element "${SERVICE_XPATH}" "force_opus" "0"
         fi
 
         # Activate package triggers. These triggers are only set during the

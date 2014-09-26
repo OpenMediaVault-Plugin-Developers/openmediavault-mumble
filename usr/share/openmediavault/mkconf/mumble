@@ -23,7 +23,7 @@ set -e
 OMV_PLUGIN_XPATH=//services/mumble
 MUMBLE_SERVER_INI=/etc/mumble-server.ini
 
-serverpassword=$(omv_config_get "${OMV_PLUGIN_XPATH}/serverpassword")
+server_password=$(omv_config_get "${OMV_PLUGIN_XPATH}/server_password")
 bandwidth=$(omv_config_get "${OMV_PLUGIN_XPATH}/bandwidth")
 users=$(omv_config_get "${OMV_PLUGIN_XPATH}/users")
 force_opus=$(omv_config_get "${OMV_PLUGIN_XPATH}/force_opus")
@@ -37,7 +37,7 @@ if [ $force_opus -eq 1 ]; then
     opusthreshold=0
 fi
 
-/bin/sed -i "s/^[#]\?serverpassword.*/serverpassword=${serverpassword}/" ${MUMBLE_SERVER_INI}
+/bin/sed -i "s/^[#]\?serverpassword.*/serverpassword=${server_password}/" ${MUMBLE_SERVER_INI}
 /bin/sed -i "s/^[#]\?bandwidth.*/bandwidth=${bandwidth}/" ${MUMBLE_SERVER_INI}
 /bin/sed -i "s/^[#]\?users.*/users=${users}/" ${MUMBLE_SERVER_INI}
 /bin/sed -i "s/^[#]\?opusthreshold.*/opusthreshold=${opusthreshold}/" ${MUMBLE_SERVER_INI}

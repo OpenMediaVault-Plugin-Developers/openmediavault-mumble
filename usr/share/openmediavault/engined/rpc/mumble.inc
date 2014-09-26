@@ -25,16 +25,41 @@ require_once "openmediavault/util.inc";
 
 class OMVRpcServiceMumble extends OMVRpcServiceAbstract
 {
-    private function getXPath()
+    /**
+     * Get the main event message path.
+     *
+     * @return string
+     */
+    private function getEventMessagePath()
     {
-        return "//services/mumble";
+        return "org.openmediavault.services.mumble";
     }
 
+    /**
+     * Get the service configuration XPath.
+     *
+     * @return string
+    */
+    private function getXpath()
+    {
+        return "/config/services/mumble";
+    }
+
+    /**
+     * Get the name of the RPC service.
+     *
+     * @return string
+     */
     public function getName()
     {
         return "Mumble";
     }
 
+    /**
+     * Initialize the RPC service.
+     *
+     * @return void
+     */
     public function initialize()
     {
         $this->registerMethod("getSettings");
@@ -42,6 +67,14 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         $this->registerMethod("setSuperUserPassword");
     }
 
+    /**
+     * Get the settings of the service.
+     *
+     * @param array $params The method paramaters.
+     * @param array $context The context of the caller.
+     *
+     * @return mixed
+    */
     public function getSettings($params, $context)
     {
         global $xmlConfig;
@@ -52,24 +85,33 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         ));
 
         // Get configuration object
-        $object = $xmlConfig->get($this->getXPath());
+        $object = $xmlConfig->get($this->getXpath());
         if (is_null($object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
+                $this->getXpath()
             );
         }
 
         // Modify result data
-        $settingsObject["enable"]         = boolval($object["enable"]);
-        $settingsObject["bandwidth"]      = intval($object["bandwidth"]);
-        $settingsObject["users"]          = intval($object["users"]);
-        $settingsObject["force_opus"]     = boolval($object["force_opus"]);
-        $settingsObject["register_name"]  = $object["register_name"];
+        $settingsObject["enable"] = boolval($object["enable"]);
+        $settingsObject["server_password"] = boolval($object["server_password"]);
+        $settingsObject["bandwidth"] = intval($object["bandwidth"]);
+        $settingsObject["users"] = intval($object["users"]);
+        $settingsObject["force_opus"] = boolval($object["force_opus"]);
+        $settingsObject["register_name"] = $object["register_name"];
 
         return $settingsObject;
     }
 
+    /**
+     * Set the settings of the service.
+     *
+     * @param array $params The method paramaters.
+     * @param array $context The context of the caller.
+     *
+     * @return mixed
+     */
     public function setSettings($params, $context)
     {
         global $xmlConfig;
@@ -83,43 +125,55 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         $this->validateMethodParams(
             $params,
             '{
-                "type"       : "object",
-                "properties" : {
-                    "enable"         : { "type" : "boolean" },
-                    "serverpassword" : { "type" : "string" },
-                    "bandwidth"      : { "type" : "integer" },
-                    "users"          : { "type" : "integer" },
-                    "force_opus"     : { "type" : "boolean" },
-                    "register_name"  : { "type" : "string" }
+                "type": "object",
+                "properties": {
+                    "enable": { "type": "boolean" },
+                    "server_password": { "type": "string" },
+                    "bandwidth": { "type": "integer" },
+                    "users": { "type": "integer" },
+                    "force_opus": { "type": "boolean" },
+                    "register_name": { "type": "string" }
                 }
             }'
         );
 
         // Prepare configuration data
         $object = array(
-            "enable"         => array_boolval($params, "enable"),
-            "serverpassword" => $params["serverpassword"],
-            "bandwidth"      => intval($params["bandwidth"]),
-            "users"          => intval($params["users"]),
-            "force_opus"     => array_boolval($params, "force_opus"),
-            "register_name"  => $params["register_name"]
+            "enable" => array_boolval($params, "enable"),
+            "server_password" => $params["server_password"],
+            "bandwidth" => intval($params["bandwidth"]),
+            "users" => intval($params["users"]),
+            "force_opus" => array_boolval($params, "force_opus"),
+            "register_name" => $params["register_name"]
         );
 
         // Set configuration object
-        if (false === $xmlConfig->replace($this->getXPath(), $object)) {
+        if (false === $xmlConfig->replace($this->getXpath(), $object)) {
             throw new OMVException(
                 OMVErrorMsg::E_CONFIG_SET_OBJECT_FAILED,
-                $this->$xPath
+                $this->getXpath()
             );
         }
 
         // Notify configuration changes
         $dispatcher = &OMVNotifyDispatcher::getInstance();
-        $dispatcher->notify(OMV_NOTIFY_MODIFY, "org.openmediavault.services.mumble", $object);
+        $dispatcher->notify(
+            OMV_NOTIFY_MODIFY,
+            $this->getEventMessagePath(),
+            $object
+        );
 
         return $object;
     }
 
+    /**
+     * Set the password for the superuser in Mumble.
+     *
+     * @param array $params The method paramaters.
+     * @param array $context The context of the caller.
+     *
+     * @return void
+     */
     public function setSuperUserPassword($params, $context)
     {
         // Validate the RPC caller context.
@@ -131,9 +185,9 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         $this->validateMethodParams(
             $params,
             '{
-                "type"       : "object",
-                "properties" : {
-                    "password" : { "type" : "string" }
+                "type": "object",
+                "properties": {
+                    "password": { "type": "string" }
                 }
             }'
         );
@@ -141,7 +195,7 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         $password = trim($params["password"]);
 
         if (strlen($password) < 8) {
-            throw new \Exception("The password length should be at least eight characters long.");
+            throw new Exception("The password length should be at least eight characters long.");
         }
 
         $cmd = sprintf("sudo -i murmurd -ini /etc/mumble-server.ini -supw %s", $password);
