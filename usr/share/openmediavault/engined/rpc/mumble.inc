@@ -95,7 +95,7 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
 
         // Modify result data
         $settingsObject["enable"] = boolval($object["enable"]);
-        $settingsObject["server_password"] = boolval($object["server_password"]);
+        $settingsObject["server_password"] = $object["server_password"];
         $settingsObject["bandwidth"] = intval($object["bandwidth"]);
         $settingsObject["users"] = intval($object["users"]);
         $settingsObject["force_opus"] = boolval($object["force_opus"]);
