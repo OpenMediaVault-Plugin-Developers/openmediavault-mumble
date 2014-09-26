@@ -4,3 +4,7 @@ Upstream-Name: openmediavault-mumble
 Files: *
 Copyright: 2014 OpenMediaVault Plugin Developers <plugins@omv-extras.org>
 License: GPL-3+
+
+Files: var/www/openmediavault/images/*
+Copyright: 2013 Keyamoon
+License: GPL-3+ or CC-BY 3.0
