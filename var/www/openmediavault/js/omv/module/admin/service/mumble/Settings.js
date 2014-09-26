@@ -26,8 +26,6 @@ Ext.define("OMV.module.admin.service.mumble.Settings", {
     rpcSetMethod: "setSettings",
 
     getFormItems: function() {
-        var me = this;
-
         return [{
             xtype: "fieldset",
             title: _("General settings"),
@@ -40,9 +38,8 @@ Ext.define("OMV.module.admin.service.mumble.Settings", {
                 fieldLabel: _("Enable"),
                 checked: false
             }, {
-                xtype: "textfield",
+                xtype: "passwordfield",
                 name: "server_password",
-                inputType: "password",
                 fieldLabel: _("Server password")
             }, {
                 xtype: "numberfield",
@@ -91,40 +88,41 @@ Ext.define("OMV.module.admin.service.mumble.Settings", {
                 labelSeparator: ""
             },
             items: [{
-                xtype: "textfield",
+                xtype: "passwordfield",
                 name: "superuser_password",
-                inputType: "password",
-                isFormField: false,
-                fieldLabel: _("SuperUser password")
+                fieldLabel: _("Password"),
+                submitValue : false
             }, {
                 xtype: "button",
                 text: _("Save password"),
-                handler: function() {
-                    var field = me.down("field[name=superuser_password]");
-
-                    OMV.Rpc.request({
-                        scope: me,
-                        relayErrors: true,
-                        callback: function(id, success, response) {
-                            if (!success) {
-                                OMV.MessageBox.error(null, response);
-                            } else {
-                                field.setValue("");
-                                OMV.MessageBox.success(_("Password changed!"), _("The password was successfully changed."));
-                            }
-                        },
-                        rpcData: {
-                            service: "Mumble",
-                            method: "setSuperUserPassword",
-                            params: {
-                                password: field.getValue()
-                            }
-                        }
-                    });
-                },
+                handler: Ext.Function.bind(this.setSuperUserPassword, this),
                 margin: "0 0 5 0"
             }]
         }];
+    },
+
+    setSuperUserPassword: function() {
+        var passwordField = this.findField("superuser_password");
+
+        OMV.Rpc.request({
+            scope: this,
+            relayErrors: true,
+            callback: function(id, success, response) {
+                if (!success) {
+                    OMV.MessageBox.error(null, response);
+                } else {
+                    passwordField.setValue("");
+                    OMV.MessageBox.success(_("Password changed!"), _("The password was successfully changed."));
+                }
+            },
+            rpcData: {
+                service: "Mumble",
+                method: "setSuperUserPassword",
+                params: {
+                    password: passwordField.getValue()
+                }
+            }
+        });
     }
 });
 
