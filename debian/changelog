@@ -1,8 +1,16 @@
-openmediavault-mumble (1.0.0.1) UNRELEASED; urgency=low
+openmediavault-mumble (1.0.1) stable; urgency=low
+
+  * Show current serverpassword. If upgrading from an earlier version the password needs to be reset to make it work.
+  * Change service icon
+  * Various code improvements
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Sat, 27 Sep 2014 00:08:20 +0200
+
+openmediavault-mumble (1.0.0.1) stable; urgency=low
 
   * Conform to OMV 0.6.0.6 trigger standards
 
- -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 16 Apr 2014 01:43:43 +0200
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Sat, 27 Sep 2014 00:06:56 +0200
 
 openmediavault-mumble (1.0.0) stable; urgency=low
 
