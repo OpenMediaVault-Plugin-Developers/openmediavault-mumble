@@ -1,3 +1,9 @@
+openmediavault-mumble (1.0.2) stable; urgency=low
+
+  * Add custom debian/control field XB-Plugin-Section
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Fri, 12 Dec 2014 06:42:10 -0600
+
 openmediavault-mumble (1.0.1) stable; urgency=low
 
   * Show current serverpassword. If upgrading from an earlier version the password needs to be reset to make it work.
