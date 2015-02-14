@@ -1,6 +1,7 @@
 openmediavault-mumble (1.0.1) stable; urgency=low
 
-  * Show current serverpassword. If upgrading from an earlier version the password needs to be reset to make it work.
+  * Show current serverpassword. If upgrading from an earlier version the
+    password needs to be reset to make it work.
   * Change service icon
   * Various code improvements
 

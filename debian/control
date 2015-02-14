@@ -1,12 +1,13 @@
 Source: openmediavault-mumble
 Section: net
-XB-Plugin-Section: gaming
 Priority: optional
 Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
-Build-Depends: debhelper (>= 9.0.0)
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
+XB-Plugin-Section: gaming
 
 Package: openmediavault-mumble
 Architecture: all
-Depends: openmediavault (>= 0.6.0.6), mumble-server, ${misc:Depends}
+Depends: openmediavault (>= 1.0), mumble-server, ${misc:Depends}
 Description: Mumble server plugin for OpenMediaVault.
+ Set up a Mumble server directly from OpenMediaVault.
