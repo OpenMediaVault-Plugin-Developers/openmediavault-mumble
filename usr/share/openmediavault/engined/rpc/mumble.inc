@@ -80,9 +80,9 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array(
+        $this->validateMethodContext($context, [
             "role" => OMV_ROLE_ADMINISTRATOR
-        ));
+        ]);
 
         // Get configuration object
         $object = $xmlConfig->get($this->getXpath());
@@ -117,9 +117,9 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array(
+        $this->validateMethodContext($context, [
             "role" => OMV_ROLE_ADMINISTRATOR
-        ));
+        ]);
 
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams(
@@ -138,14 +138,14 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
         );
 
         // Prepare configuration data
-        $object = array(
+        $object = [
             "enable" => array_boolval($params, "enable"),
             "server_password" => $params["server_password"],
             "bandwidth" => intval($params["bandwidth"]),
             "users" => intval($params["users"]),
             "force_opus" => array_boolval($params, "force_opus"),
             "register_name" => $params["register_name"]
-        );
+        ];
 
         // Set configuration object
         if (false === $xmlConfig->replace($this->getXpath(), $object)) {
@@ -177,9 +177,9 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
     public function setSuperUserPassword($params, $context)
     {
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array(
+        $this->validateMethodContext($context, [
             "role" => OMV_ROLE_ADMINISTRATOR
-        ));
+        ]);
 
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams(

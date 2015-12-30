@@ -79,12 +79,12 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
 
         $systemCtl = new OMVSystemCtl($this->serviceName);
 
-        return array(
+        return [
             "name"    => $this->getName(),
             "title"   => gettext("Mumble"),
             "enabled" => boolval($object["enable"]),
             "running" => $systemCtl->isActive()
-        );
+        ];
     }
 
     /**
@@ -152,7 +152,7 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
         $dispatcher->addListener(
             OMV_NOTIFY_CREATE | OMV_NOTIFY_MODIFY | OMV_NOTIFY_DELETE,
             $this->getEventMessagePath(),
-            array($this, "setDirty")
+            [$this, "setDirty"]
         );
     }
 }
