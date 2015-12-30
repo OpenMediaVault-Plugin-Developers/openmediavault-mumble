@@ -8,6 +8,8 @@ XB-Plugin-Section: gaming
 
 Package: openmediavault-mumble
 Architecture: all
-Depends: openmediavault (>= 1.0), mumble-server, ${misc:Depends}
+Depends: mumble-server,
+         openmediavault (>= 3.0),
+         ${misc:Depends}
 Description: Mumble server plugin for OpenMediaVault.
  Set up a Mumble server directly from OpenMediaVault.

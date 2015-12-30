@@ -204,7 +204,7 @@ class OMVRpcServiceMumble extends OMVRpcServiceAbstract
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
-                implode("\n", $output)
+                implode(PHP_EOL, $output)
             );
         }
     }

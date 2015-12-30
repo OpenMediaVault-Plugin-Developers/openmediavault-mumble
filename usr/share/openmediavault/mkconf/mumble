@@ -20,8 +20,8 @@ set -e
 . /etc/default/openmediavault
 . /usr/share/openmediavault/scripts/helper-functions
 
-OMV_PLUGIN_XPATH=//services/mumble
-MUMBLE_SERVER_INI=/etc/mumble-server.ini
+OMV_PLUGIN_XPATH="/config/services/mumble"
+MUMBLE_SERVER_INI="/etc/mumble-server.ini"
 
 server_password=$(omv_config_get "${OMV_PLUGIN_XPATH}/server_password")
 bandwidth=$(omv_config_get "${OMV_PLUGIN_XPATH}/bandwidth")

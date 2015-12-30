@@ -19,15 +19,15 @@
 
 require_once "openmediavault/config.inc";
 require_once "openmediavault/error.inc";
-require_once "openmediavault/initscript.inc";
 require_once "openmediavault/module.inc";
+require_once "openmediavault/systemctl.inc";
 require_once "openmediavault/util.inc";
 
 class OMVModuleMumble extends OMVModuleServiceAbstract implements
     OMVINotifyListener,
     OMVIModuleServiceStatus
 {
-    private $initName = "mumble-server";
+    private $serviceName = "mumble-server";
 
     /**
      * Get the main event message path.
@@ -77,13 +77,13 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
             );
         }
 
-        $initd = new OMVSysVInitScript($this->initName);
+        $systemCtl = new OMVSystemCtl($this->serviceName);
 
         return array(
             "name"    => $this->getName(),
             "title"   => gettext("Mumble"),
             "enabled" => boolval($object["enable"]),
-            "running" => $initd->status() == 0
+            "running" => $systemCtl->isActive()
         );
     }
 
@@ -94,13 +94,13 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
      */
     public function applyConfig()
     {
-        $cmd = sprintf("omv-mkconf %s 2>&1", $this->getName());
+        $cmd = sprintf("export LANG=C; omv-mkconf %s 2>&1", $this->getName());
 
         if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
-                implode("\n", $output)
+                implode(PHP_EOL, $output)
             );
         }
     }
@@ -127,8 +127,8 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
             return;
         }
 
-        $initd = new OMVSysVInitScript($this->initName, true);
-        $initd->exec();
+        $systemCtl = new OMVSystemCtl($this->serviceName);
+        $systemCtl->enable(true);
     }
 
     /**
@@ -138,8 +138,8 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
      */
     public function stopService()
     {
-        $initd = new OMVSysVInitScript($this->initName);
-        $initd->exec();
+        $systemCtl = new OMVSystemCtl($this->serviceName);
+        $systemCtl->disable(true);
     }
 
     /**
