@@ -43,7 +43,7 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
      * Get the service configuration XPath.
      *
      * @return string
-    */
+     */
     private function getXpath()
     {
         return "/config/services/mumble";
