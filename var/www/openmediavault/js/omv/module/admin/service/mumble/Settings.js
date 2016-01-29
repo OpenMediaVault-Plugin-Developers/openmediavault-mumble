@@ -88,15 +88,19 @@ Ext.define('OMV.module.admin.service.mumble.Settings', {
                 labelSeparator: ''
             },
             items: [{
-                xtype: 'passwordfield',
-                name: 'superuser_password',
-                fieldLabel: _('Password'),
-                submitValue : false
-            }, {
-                xtype: 'button',
-                text: _('Save password'),
-                handler: Ext.Function.bind(this.setSuperUserPassword, this),
-                margin: '0 0 5 0'
+                xtype: 'fieldcontainer',
+                layout: 'hbox',
+                items: [{
+                    xtype: 'passwordfield',
+                    name: 'superuser_password',
+                    fieldLabel: _('Password'),
+                    flex: 1,
+                    submitValue : false
+                }, {
+                    xtype: 'button',
+                    text: _('Save'),
+                    handler: Ext.Function.bind(this.setSuperUserPassword, this)
+                }]
             }]
         }];
     },
