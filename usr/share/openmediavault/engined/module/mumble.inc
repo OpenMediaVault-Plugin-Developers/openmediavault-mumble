@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (C) 2014 OpenMediaVault Plugin Developers
+ * Copyright (C) 2014 OpenMediaVault Plugin Developers.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-require_once "openmediavault/config.inc";
-require_once "openmediavault/error.inc";
-require_once "openmediavault/module.inc";
-require_once "openmediavault/systemctl.inc";
-require_once "openmediavault/util.inc";
+require_once 'openmediavault/config.inc';
+require_once 'openmediavault/error.inc';
+require_once 'openmediavault/module.inc';
+require_once 'openmediavault/systemctl.inc';
 
 class OMVModuleMumble extends OMVModuleServiceAbstract implements
     OMVINotifyListener,
     OMVIModuleServiceStatus
 {
-    private $serviceName = "mumble-server";
+    /**
+     * The name of the unit for this service.
+     *
+     * @var string
+     */
+    private $serviceName = 'mumble-server';
 
     /**
-     * Get the main event message path.
+     * The main event message path for the plugin.
      *
-     * @return string
+     * @var string
      */
-    private function getEventMessagePath()
-    {
-        return "org.openmediavault.services.mumble";
-    }
+    private $eventMessagePath = 'org.openmediavault.services.mumble';
 
     /**
      * Get the service configuration XPath.
@@ -46,7 +46,7 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
      */
     private function getXpath()
     {
-        return "/config/services/mumble";
+        return '/config/services/mumble';
     }
 
     /**
@@ -56,13 +56,15 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
      */
     public function getName()
     {
-        return "mumble";
+        return 'mumble';
     }
 
     /**
      * Get the module status.
      *
      * @return array
+     *
+     * @throws OMVException
      */
     public function getStatus()
     {
@@ -80,21 +82,21 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
         $systemCtl = new OMVSystemCtl($this->serviceName);
 
         return [
-            "name"    => $this->getName(),
-            "title"   => gettext("Mumble"),
-            "enabled" => boolval($object["enable"]),
-            "running" => $systemCtl->isActive()
+            'name' => $this->getName(),
+            'title' => gettext('Mumble'),
+            'enabled' => boolval($object['enable']),
+            'running' => $systemCtl->isActive(),
         ];
     }
 
     /**
      * Generate the configuration.
      *
-     * @return void
+     * @throws OMVException
      */
     public function applyConfig()
     {
-        $cmd = sprintf("export LANG=C; omv-mkconf %s 2>&1", $this->getName());
+        $cmd = sprintf('export LANG=C; omv-mkconf %s 2>&1', $this->getName());
 
         if (0 !== $this->exec($cmd, $output)) {
             throw new OMVException(
@@ -109,6 +111,8 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
      * Start the managed service.
      *
      * @return void
+     *
+     * @throws OMVException
      */
     public function startService()
     {
@@ -123,7 +127,7 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
             );
         }
 
-        if (!$object["enable"]) {
+        if (!$object['enable']) {
             return;
         }
 
@@ -145,18 +149,19 @@ class OMVModuleMumble extends OMVModuleServiceAbstract implements
     /**
      * Bind listeners.
      *
+     * @param OMVNotifyDispatcher $dispatcher
      * @return void
      */
     public function bindListeners(OMVNotifyDispatcher $dispatcher)
     {
         $dispatcher->addListener(
             OMV_NOTIFY_CREATE | OMV_NOTIFY_MODIFY | OMV_NOTIFY_DELETE,
-            $this->getEventMessagePath(),
-            [$this, "setDirty"]
+            $this->eventMessagePath,
+            [$this, 'setDirty']
         );
     }
 }
 
-// Register module
+// Register the module.
 $moduleMgr = &OMVModuleMgr::getInstance();
 $moduleMgr->registerModule(new OMVModuleMumble());

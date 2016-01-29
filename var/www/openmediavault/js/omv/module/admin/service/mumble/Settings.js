@@ -18,33 +18,33 @@
 // require("js/omv/WorkspaceManager.js")
 // require("js/omv/workspace/form/Panel.js")
 
-Ext.define("OMV.module.admin.service.mumble.Settings", {
-    extend: "OMV.workspace.form.Panel",
+Ext.define('OMV.module.admin.service.mumble.Settings', {
+    extend: 'OMV.workspace.form.Panel',
 
-    rpcService: "Mumble",
-    rpcGetMethod: "getSettings",
-    rpcSetMethod: "setSettings",
+    rpcService: 'Mumble',
+    rpcGetMethod: 'getSettings',
+    rpcSetMethod: 'setSettings',
 
     getFormItems: function() {
         return [{
-            xtype: "fieldset",
-            title: _("General settings"),
+            xtype: 'fieldset',
+            title: _('General settings'),
             defaults: {
-                labelSeparator: ""
+                labelSeparator: ''
             },
             items: [{
-                xtype: "checkbox",
-                name: "enable",
-                fieldLabel: _("Enable"),
+                xtype: 'checkbox',
+                name: 'enable',
+                fieldLabel: _('Enable'),
                 checked: false
             }, {
-                xtype: "passwordfield",
-                name: "server_password",
-                fieldLabel: _("Server password")
+                xtype: 'passwordfield',
+                name: 'server_password',
+                fieldLabel: _('Server password')
             }, {
-                xtype: "numberfield",
-                name: "bandwidth",
-                fieldLabel: _("Bandwidth"),
+                xtype: 'numberfield',
+                name: 'bandwidth',
+                fieldLabel: _('Bandwidth'),
                 minValue: 18200,
                 maxValue: 130000,
                 allowDecimals: false,
@@ -52,57 +52,57 @@ Ext.define("OMV.module.admin.service.mumble.Settings", {
                 allowBlank: false,
                 value: 72000,
                 plugins: [{
-                    ptype: "fieldinfo",
-                    text: _("Per-user max bandwidth usage in bits per second.")
+                    ptype: 'fieldinfo',
+                    text: _('Per-user max bandwidth usage in bits per second.')
                 }]
             }, {
-                xtype: "numberfield",
-                name: "users",
-                fieldLabel: _("Maximum users"),
+                xtype: 'numberfield',
+                name: 'users',
+                fieldLabel: _('Maximum users'),
                 minValue: 0,
                 allowDecimals: false,
                 allowNegative: false,
                 allowBlank: false,
                 value: 100
             }, {
-                xtype: "checkbox",
-                name: "force_opus",
-                fieldLabel: _("Force Opus codec"),
+                xtype: 'checkbox',
+                name: 'force_opus',
+                fieldLabel: _('Force Opus codec'),
                 value: false
             }]
         }, {
-            xtype: "fieldset",
-            title: _("Server registration"),
+            xtype: 'fieldset',
+            title: _('Server registration'),
             defaults: {
-                labelSeparator: ""
+                labelSeparator: ''
             },
             items: [{
-                xtype: "textfield",
-                name: "register_name",
-                fieldLabel: _("Name")
+                xtype: 'textfield',
+                name: 'register_name',
+                fieldLabel: _('Name')
             }]
         }, {
-            xtype: "fieldset",
-            title: _("SuperUser"),
+            xtype: 'fieldset',
+            title: _('SuperUser'),
             defaults: {
-                labelSeparator: ""
+                labelSeparator: ''
             },
             items: [{
-                xtype: "passwordfield",
-                name: "superuser_password",
-                fieldLabel: _("Password"),
+                xtype: 'passwordfield',
+                name: 'superuser_password',
+                fieldLabel: _('Password'),
                 submitValue : false
             }, {
-                xtype: "button",
-                text: _("Save password"),
+                xtype: 'button',
+                text: _('Save password'),
                 handler: Ext.Function.bind(this.setSuperUserPassword, this),
-                margin: "0 0 5 0"
+                margin: '0 0 5 0'
             }]
         }];
     },
 
     setSuperUserPassword: function() {
-        var passwordField = this.findField("superuser_password");
+        var passwordField = this.findField('superuser_password');
 
         OMV.Rpc.request({
             scope: this,
@@ -111,13 +111,13 @@ Ext.define("OMV.module.admin.service.mumble.Settings", {
                 if (!success) {
                     OMV.MessageBox.error(null, response);
                 } else {
-                    passwordField.setValue("");
-                    OMV.MessageBox.success(_("Password changed!"), _("The password was successfully changed."));
+                    passwordField.setValue('');
+                    OMV.MessageBox.success(_('Password changed!'), _('The password was successfully changed.'));
                 }
             },
             rpcData: {
-                service: "Mumble",
-                method: "setSuperUserPassword",
+                service: 'Mumble',
+                method: 'setSuperUserPassword',
                 params: {
                     password: passwordField.getValue()
                 }
@@ -127,9 +127,9 @@ Ext.define("OMV.module.admin.service.mumble.Settings", {
 });
 
 OMV.WorkspaceManager.registerPanel({
-    id: "settings",
-    path: "/service/mumble",
-    text: _("Settings"),
+    id: 'settings',
+    path: '/service/mumble',
+    text: _('Settings'),
     position: 10,
-    className: "OMV.module.admin.service.mumble.Settings"
+    className: 'OMV.module.admin.service.mumble.Settings'
 });
