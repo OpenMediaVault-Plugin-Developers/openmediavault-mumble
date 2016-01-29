@@ -1,3 +1,9 @@
+openmediavault-mumble (3.0.1) stable; urgency=medium
+
+  * Minor tweak in the frontend.
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Fri, 29 Jan 2016 17:19:55 +0100
+
 openmediavault-mumble (3.0) stable; urgency=low
 
   * OMV 3.0 release.
