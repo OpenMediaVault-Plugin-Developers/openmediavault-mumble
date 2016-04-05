@@ -1,0 +1,36 @@
+{
+    "type": "config",
+    "id": "conf.service.mumble",
+    "title": "Mumble",
+    "queryinfo": {
+        "xpath": "/config/services/mumble",
+        "iterable": false
+    },
+    "properties": {
+        "enable": {
+            "type": "boolean",
+            "default": false
+        },
+        "server_password": {
+            "type": "string"
+        },
+        "bandwidth": {
+            "type": "integer",
+            "minimum": 18200,
+            "maximum": 130000,
+            "default": 72000
+        },
+        "users": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 100
+        },
+        "force_opus": {
+            "type": "boolean",
+            "default": false
+        },
+        "register_name": {
+            "type": "string"
+        }
+    }
+}

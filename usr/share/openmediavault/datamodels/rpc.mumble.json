@@ -1,0 +1,49 @@
+[{
+    "type": "rpc",
+    "id": "rpc.mumble.setsettings",
+    "params": {
+        "type": "object",
+        "properties": {
+            "enable": {
+                "type": "boolean",
+                "required": true
+            },
+            "server_password": {
+                "type": "string",
+                "required": true
+            },
+            "bandwidth": {
+                "type": "integer",
+                "minimum": 18200,
+                "maximum": 130000,
+                "required": true
+            },
+            "users": {
+                "type": "integer",
+                "minimum": 0,
+                "required": true
+            },
+            "force_opus": {
+                "type": "boolean",
+                "required": true
+            },
+            "register_name": {
+                "type": "string",
+                "required": true
+            }
+        }
+    }
+}, {
+    "type": "rpc",
+    "id": "rpc.mumble.setsuperuserpassword",
+    "params": {
+        "type": "object",
+        "properties": {
+            "password": {
+                "type": "string",
+                "minLength": 8,
+                "required": true
+            }
+        }
+    }
+}]
