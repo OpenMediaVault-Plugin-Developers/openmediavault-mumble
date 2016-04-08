@@ -40,8 +40,8 @@ class Mumble extends ServiceAbstract
 
     public function __construct(Database $database = null, Dispatcher $dispatcher = null)
     {
-        $this->database = $database ? $database : Database::getInstance();
-        $this->dispatcher = $dispatcher ? $dispatcher : Dispatcher::getInstance();
+        $this->database = $database ?: Database::getInstance();
+        $this->dispatcher = $dispatcher ?: Dispatcher::getInstance();
     }
 
     /**
@@ -71,6 +71,7 @@ class Mumble extends ServiceAbstract
      *
      * @param array $params  The method paramaters.
      * @param array $context The context of the caller.
+     *
      * @return array
      */
     public function getSettings($params, $context)
@@ -87,6 +88,7 @@ class Mumble extends ServiceAbstract
      *
      * @param array $params  The method paramaters.
      * @param array $context The context of the caller.
+     *
      * @return array
      */
     public function setSettings($params, $context)
@@ -108,6 +110,7 @@ class Mumble extends ServiceAbstract
      *
      * @param array $params  The method paramaters.
      * @param array $context The context of the caller.
+     *
      * @return void
      */
     public function setSuperUserPassword($params, $context)

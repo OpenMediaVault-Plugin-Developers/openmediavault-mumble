@@ -45,7 +45,7 @@ class Mumble extends ServiceAbstract implements
 
     public function __construct(Database $database = null)
     {
-        $this->database = $database ? $database : Database::getInstance();
+        $this->database = $database ?: Database::getInstance();
     }
 
     /**
@@ -118,6 +118,7 @@ class Mumble extends ServiceAbstract implements
      * Bind listeners.
      *
      * @param Dispatcher $dispatcher
+     *
      * @return void
      */
     public function bindListeners(Dispatcher $dispatcher)
