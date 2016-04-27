@@ -38,7 +38,7 @@ class Mumble extends ServiceAbstract implements
     private $dataModelPath = 'conf.service.mumble';
 
     /** @var string */
-    private $eventMessagePath = 'org.openmediavault.services.mumble';
+    private $eventMessagePath = 'org.openmediavault.conf.service.mumble';
 
     /** @var string */
     private $serviceName = 'mumble-server.service';
@@ -84,7 +84,7 @@ class Mumble extends ServiceAbstract implements
     public function applyConfig()
     {
         $cmd = new Process('omv-mkconf', $this->getName());
-        $cmd->setRedirect2to1(true);
+        $cmd->setRedirect2to1();
         $cmd->execute();
     }
 

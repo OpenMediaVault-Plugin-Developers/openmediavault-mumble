@@ -36,7 +36,7 @@ class Mumble extends ServiceAbstract
     private $dispatcher;
 
     /** @var string */
-    private $eventMessagePath = 'org.openmediavault.services.mumble';
+    private $eventMessagePath = 'org.openmediavault.conf.service.mumble';
 
     public function __construct(Database $database = null, Dispatcher $dispatcher = null)
     {
@@ -124,7 +124,7 @@ class Mumble extends ServiceAbstract
             '-supw',
             escapeshellarg($params['password']),
         ]);
-        $cmd->setRedirect2to1(true);
+        $cmd->setRedirect2to1();
         $cmd->execute();
     }
 }
