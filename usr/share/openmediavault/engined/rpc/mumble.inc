@@ -20,7 +20,6 @@
 namespace OMV\Engined\Rpc;
 
 use OMV\Config\Database;
-use OMV\Engine\Notify\Dispatcher;
 use OMV\Rpc\ServiceAbstract;
 use OMV\System\Process;
 
@@ -32,16 +31,9 @@ class Mumble extends ServiceAbstract
     /** @var string */
     private $dataModelPath = 'conf.service.mumble';
 
-    /** @var Dispatcher */
-    private $dispatcher;
-
-    /** @var string */
-    private $eventMessagePath = 'org.openmediavault.conf.service.mumble';
-
-    public function __construct(Database $database = null, Dispatcher $dispatcher = null)
+    public function __construct(Database $database = null)
     {
         $this->database = $database ?: Database::getInstance();
-        $this->dispatcher = $dispatcher ?: Dispatcher::getInstance();
     }
 
     /**
@@ -100,7 +92,6 @@ class Mumble extends ServiceAbstract
         $object->setAssoc($params);
 
         $this->database->set($object);
-        $this->dispatcher->notify(OMV_NOTIFY_MODIFY, $this->eventMessagePath, $object);
 
         return $object->getAssoc();
     }
